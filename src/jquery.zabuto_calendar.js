@@ -1,18 +1,15 @@
 /**
- * Zabuto Calendar
+ * Zabuto Calendar jQuery Plugin
  */
 
-/**
- * Init translations
- */
-var ZabutoCalendarTranslations = {};
-
-/**
- * jQuery Plugin
- */
 (function ($, window, document, undefined) {
 
 	"use strict";
+
+	/**
+	 * Plugin name
+	 */
+	var pluginName = 'zabuto_calendar';
 
 	/**
 	 * Current date
@@ -20,9 +17,49 @@ var ZabutoCalendarTranslations = {};
 	var now = new Date();
 
 	/**
+	 * Plugin constructor
+	 */
+	function ZabutoCalendar(element, options) {
+		this.element = element;
+		this._name = pluginName;
+		this._defaults = $.fn[pluginName].defaults;
+		this.settings = $.extend({}, this._defaults, options);
+		this.settings.language = this.settings.language.toLowerCase();
+
+		this._languages = $.fn[pluginName].languages;
+		if (null !== this.settings.translation) {
+			this._setTranslation(this.settings.language, this.settings.translation);
+		}
+
+		this.init();
+	}
+
+	/**
+	 * Plugin wrapper
+	 */
+	$.fn[pluginName] = function (options) {
+		var argsArray;
+		if (options !== undefined) {
+			var args = $.makeArray(arguments);
+			argsArray = args.slice(1);
+		}
+
+		return this.each(function () {
+			var instance = $.data(this, 'plugin_' + pluginName);
+			if (!instance) {
+				$.data(this, 'plugin_' + pluginName, new ZabutoCalendar(this, options));
+			} else {
+				if (typeof options === 'string' && typeof instance[options] === 'function') {
+					instance[options].apply(instance, argsArray);
+				}
+			}
+		});
+	};
+
+	/**
 	 * Defaults
 	 */
-	var defaults = {
+	$.fn[pluginName].defaults = {
 		year: now.getFullYear(),
 		month: (now.getMonth() + 1),
 		language: 'en',
@@ -35,72 +72,43 @@ var ZabutoCalendarTranslations = {};
 		navigation: {
 			prev: '<span class="glyphicon glyphicon-chevron-left"></span>',
 			next: '<span class="glyphicon glyphicon-chevron-right"></span>'
-		}
+		},
+		onInit: $.noop,
+		onDestroy: $.noop
 	};
 
 	/**
-	 * Plugin constructor
+	 * Languages
 	 */
-	function ZabutoCalendar(element, options) {
-		this.element = element;
-		this.settings = $.extend({}, defaults, options);
-		this.translation = null;
-		this.init();
-
-		// @todo this.api = new _api();
-	}
-
-	/**
-	 * Plugin wrapper
-	 */
-	$.fn.zabuto_calendar = function (options) {
-		return this.each(function () {
-			if (!$.data(this, 'zabuto-calendar')) {
-				$.data(this, 'zabuto-calendar', new ZabutoCalendar(this, options));
-			}
-		});
-	};
+	$.fn[pluginName].languages = {};
 
 	/**
 	 * Functions
 	 */
 	$.extend(ZabutoCalendar.prototype, {
-
 		/**
 		 * Initialize
 		 */
 		init: function () {
-			var calendar = this;
-			var locale = calendar.settings.language.toLowerCase();
-
-			$(calendar.element).data('locale', locale);
-			$(calendar.element).data('year', calendar.settings.year);
-			$(calendar.element).data('month', calendar.settings.month);
-
-			var translation = calendar._getTranslation(locale);
-			if (null !== translation) {
-				calendar.translation = translation;
-				calendar.render();
-			} else {
-				var path = $('script[src*=zabuto_calendar]').attr('src');
-				path = path.replace('zabuto_calendar.js', 'zabuto_calendar.' + locale + '.json');
-				$.getJSON(path, function (json) {
-					calendar._setTranslation(locale, json);
-					calendar.translation = json;
-					calendar.render();
-				});
-			}
+			var element = $(this.element);
+			element.data('year', this.settings.year);
+			element.data('month', this.settings.month);
+			this.settings.onInit.call(element);
+			this.render();
 		},
 
 		/**
 		 * Destroy
 		 */
 		destroy: function () {
-			/* @todo */
-			this._removeLocalData();
-			if (!$.data(this, 'zabuto-calendar')) {
-				$.data(this, 'zabuto-calendar', null);
-			}
+			var element = $(this.element);
+
+			this.settings.onDestroy.call(element);
+
+			element.removeData('plugin_' + pluginName);
+			element.removeData('year');
+			element.removeData('month');
+			element.empty();
 		},
 
 		/**
@@ -150,11 +158,8 @@ var ZabutoCalendarTranslations = {};
 
 			var tbody = this._renderDaysInMonth(year, month);
 
-			//var tfoot = $('<tfoot></tfoot>');
-
 			table.append(thead);
 			table.append(tbody);
-			//table.append(tfoot);
 
 			return table;
 		},
@@ -163,31 +168,32 @@ var ZabutoCalendarTranslations = {};
 		 * Render navigation
 		 */
 		_renderNavigation: function (year, month) {
-			var calendar = this;
+			var self = this;
 
-			var label = calendar.settings.header_format;
+			var label = self.settings.header_format;
 			label = label.replace('year', year.toString());
 
-			if (null !== calendar.translation && 'months' in calendar.translation) {
-				var translation = calendar.translation['months'];
-				label = label.replace('month', translation[month.toString()]);
+			var translation = self._getTranslation(self.settings.language);
+			if (null !== translation && 'months' in translation) {
+				var labels = translation['months'];
+				label = label.replace('month', labels[month.toString()]);
 			} else {
 				label = label.replace('month', month.toString());
 			}
 
 			var nav = $('<tr></tr>').addClass('zabuto-calendar__navigation').attr('role', 'navigation');
 
-			var prev = calendar._renderNavigationItem('prev', calendar._calculatePrevious(year, month));
-			var next = calendar._renderNavigationItem('next', calendar._calculateNext(year, month));
+			var prev = self._renderNavigationItem('prev', self._calculatePrevious(year, month));
+			var next = self._renderNavigationItem('next', self._calculateNext(year, month));
 
 			var title = $('<span></span>').text(label).data('to', {
-				year: calendar.settings.year,
-				month: calendar.settings.month
+				year: self.settings.year,
+				month: self.settings.month
 			});
 			title.addClass('zabuto-calendar__navigation__item--header__title');
 			title.on('dblclick', function () {
 				var to = $(this).data('to');
-				calendar.goto(to.year, to.month);
+				self.goto(to.year, to.month);
 			});
 
 			var header = $('<td></td>');
@@ -205,16 +211,16 @@ var ZabutoCalendarTranslations = {};
 		 * Render navigation item
 		 */
 		_renderNavigationItem: function (type, to) {
-			var calendar = this;
+			var self = this;
 
 			type = type.toString();
 
 			var item = $('<td></td>').data('nav', type).data('to', to);
 			item.addClass('zabuto-calendar__navigation__item--' + type);
-			item.html(calendar.settings.navigation[type]);
+			item.html(self.settings.navigation[type]);
 			item.on('click', function () {
 				var to = $(this).data('to');
-				calendar.goto(to.year, to.month);
+				self.goto(to.year, to.month);
 			});
 
 			return item;
@@ -227,8 +233,9 @@ var ZabutoCalendarTranslations = {};
 			var start = this.settings.week_starts;
 
 			var labels = {"0": "0", "1": "1", "2": "2", "3": "3", "4": "4", "5": "5", "6": "6"};
-			if (null !== this.translation && 'days' in this.translation) {
-				labels = this.translation['days'];
+			var translation = this._getTranslation(this.settings.language);
+			if (null !== translation && 'days' in translation) {
+				labels = translation['days'];
 			}
 
 			var dow = $('<tr></tr>').addClass('zabuto-calendar__days-of-week');
@@ -255,12 +262,12 @@ var ZabutoCalendarTranslations = {};
 		 * Render days of the month
 		 */
 		_renderDaysInMonth: function (year, month) {
-			var calendar = this;
-			var start = calendar.settings.week_starts;
+			var self = this;
+			var start = self.settings.week_starts;
 
-			var weeks = calendar._calculateWeeksInMonth(year, month);
-			var days = calendar._calculateLastDayOfMonth(year, month);
-			var firstDow = calendar._calculateDayOfWeek(year, month, 1);
+			var weeks = self._calculateWeeksInMonth(year, month);
+			var days = self._calculateLastDayOfMonth(year, month);
+			var firstDow = self._calculateDayOfWeek(year, month, 1);
 
 			var dows = [0, 1, 2, 3, 4, 5, 6];
 			var checkDow = firstDow;
@@ -273,13 +280,13 @@ var ZabutoCalendarTranslations = {};
 
 			var day = 1;
 			for (var wk = 1; wk <= weeks; wk++) {
-				var row = calendar._renderWeek(wk, weeks);
+				var row = self._renderWeek(wk, weeks);
 
 				$.each(dows, function (i, dow) {
 					if ((wk === 1 && dow < checkDow) || day > days) {
 						row.append($('<td></td>').addClass('zabuto-calendar__day--empty'));
 					} else {
-						var cell = calendar._renderDay(year, month, day, dow);
+						var cell = self._renderDay(year, month, day, dow);
 						row.append(cell);
 						day++;
 					}
@@ -332,60 +339,23 @@ var ZabutoCalendarTranslations = {};
 		 * Get translation
 		 */
 		_getTranslation: function (locale) {
-			var setting = this.settings.translation;
-			if (null !== setting && 'months' in setting && 'days' in setting) {
-				return setting;
+			var languages = this._languages;
+			if (locale in languages) {
+				return languages[locale];
 			}
 
-			if (typeof ZabutoCalendarTranslations === 'object' && locale in ZabutoCalendarTranslations) {
-				return ZabutoCalendarTranslations[locale];
-			}
-
-			var key = 'zabuto-calendar-translation-' + locale;
-			var translation = null;
-
-			if (localStorage !== undefined) {
-				try {
-					translation = localStorage.getItem(key);
-				} catch (e) {
-				}
-			}
-
-			if (null !== translation) {
-				translation = JSON.parse(translation);
-			}
-
-			return translation;
+			return null;
 		},
 
 		/**
-		 * Save translation in local storage
+		 * Set translation
 		 */
 		_setTranslation: function (locale, translation) {
-			var key = 'zabuto-calendar-translation-' + locale;
-			if (localStorage !== undefined) {
-				try {
-					localStorage.setItem(key, JSON.stringify(translation));
-				} catch (e) {
-				}
+			if (typeof translation === 'object' && 'months' in translation && 'days' in translation) {
+				this._languages[locale] = translation;
+				return true;
 			}
-		},
-
-		/**
-		 * Remove data from local storage
-		 */
-		_removeLocalData: function () {
-			if (localStorage !== undefined) {
-				try {
-					for (var i = 0; i < localStorage.length; i++) {
-						var key = localStorage.key(i);
-						if (key.substr(0, 15) === 'zabuto-calendar') {
-							localStorage.removeItem(key);
-						}
-					}
-				} catch (e) {
-				}
-			}
+			return false;
 		},
 
 		/**

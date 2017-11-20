@@ -1,4 +1,4 @@
-/*! Zabuto Calendar - v2.0.0 - 2017-11-12
+/*! Zabuto Calendar - v2.0.0 - 2017-11-20
 * https://github.com/zabuto/calendar
 * Copyright (c) 2017 Anke Heijnen; Licensed MIT */
 
@@ -18,10 +18,22 @@
 .zabuto-calendar__navigation__item--next {
 	text-align: center;
 	cursor: pointer;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .zabuto-calendar__navigation__item--header {
 	text-align: center;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .zabuto-calendar__navigation__item--header__title {

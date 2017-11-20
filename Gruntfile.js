@@ -9,13 +9,15 @@ module.exports = function (grunt) {
 		'<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
 		'* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
 		' Licensed <%= pkg.license %> */\n\n',
+		jquery_header: ';(function ($) {\n\n',
+		jquery_footer: '\n\n})(jQuery);',
 		clean: {
 			build: ['dist']
 		},
 		json: {
 			locale: {
 				options: {
-					namespace: 'ZabutoCalendarTranslations',
+					namespace: "$.fn['<%= pkg.name %>'].languages",
 					includePath: false,
 					processName: function (filename) {
 						return filename.toLowerCase();
@@ -26,15 +28,20 @@ module.exports = function (grunt) {
 			}
 		},
 		concat: {
-			options: {
-				banner: '<%= banner %>',
-				stripBanners: true
-			},
 			js: {
+				options: {
+					banner: '<%= banner %><%= jquery_header %>',
+					footer: '<%=jquery_footer %>',
+					stripBanners: true
+				},
 				src: ['src/jquery.<%= pkg.name %>.js', 'dist/<%= pkg.name %>.js'],
 				dest: 'dist/<%= pkg.name %>.js'
 			},
 			css: {
+				options: {
+					banner: '<%= banner %>',
+					stripBanners: true
+				},
 				src: ['src/jquery.<%= pkg.name %>.css'],
 				dest: 'dist/<%= pkg.name %>.css'
 			}
@@ -54,6 +61,9 @@ module.exports = function (grunt) {
 					'dist/<%= pkg.name %>.min.css': ['dist/<%= pkg.name %>.css']
 				}
 			}
+		},
+		qunit: {
+			files: ['test/**/*.html']
 		},
 		jshint: {
 			options: {
@@ -77,11 +87,11 @@ module.exports = function (grunt) {
 			},
 			src: {
 				files: '<%= jshint.src.src %>',
-				tasks: ['jshint:src']
+				tasks: ['jshint:src', 'qunit']
 			},
 			test: {
 				files: '<%= jshint.test.src %>',
-				tasks: ['jshint:test']
+				tasks: ['jshint:test', 'qunit']
 			}
 		}
 	});
@@ -89,6 +99,7 @@ module.exports = function (grunt) {
 	// Load plugins
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-json');
 	grunt.loadNpmTasks('grunt-contrib-concat');
@@ -96,6 +107,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 
 	// Tasks
-	grunt.registerTask('default', ['jshint', 'clean', 'json', 'concat', 'uglify', 'cssmin']);
+	grunt.registerTask('default', ['jshint', 'qunit', 'clean', 'json', 'concat', 'uglify', 'cssmin']);
 
 };

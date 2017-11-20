@@ -20,6 +20,9 @@ Please don't edit files in the `dist` subdirectory as they are generated via Gru
 #### Code style
 Regarding code style like indentation and whitespace, follow the [jQuery style guide](http://contribute.jquery.com/style-guides/js). This repository contains an [.editorconfig](http://editorconfig.org/) file for your convenience.
 
+#### Unit testing
+While Grunt can run the included unit tests via [PhantomJS](http://phantomjs.org/), this shouldn't be considered a substitute for the real thing. Please be sure to test the `test/*.html` unit test file(s) in _actual_ browsers.
+
 ### Modifying the code
 First, ensure that you have the latest [Node.js](http://nodejs.org/) and [npm](http://npmjs.org/) installed.
 
@@ -37,5 +40,6 @@ Assuming that you don't see any red, you're ready to go. Just be sure to run `gr
 1. If you are addressing a problem, please report it as an issue (see above).
 2. Create a new branch, please don't work in your `master` branch directly.
 3. Fix stuff.
-4. Describe the change in your pull request and reference the issue number, like this: "Fixed bug for navigation to next month. Fixes #319". If you're adding a new localization file, use something like: "Localization: added Dutch (nl) language".
-5. Push to your fork and submit a pull request.
+4. Add or update tests along with your patch. Run `grunt` to see the tests fail. Also run the `test/*.html` file(s) in at least one actual browser.
+5. Describe the change in your pull request and reference the issue number, like this: "Fixed bug for navigation to next month. Fixes #319". If you're adding a new localization file, use something like: "Localization: added Dutch (nl) language".
+6. Push to your fork and submit a pull request.
