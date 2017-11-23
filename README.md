@@ -1,18 +1,20 @@
 # Zabuto Calendar
 
-The Zabuto Calendar jQuery Plugin lets you add a simple month calendar to your web page.
-
-It's lightweight, efficient and easy to use.
+The Zabuto Calendar jQuery Plugin lets you add a simple month calendar to your web page. It's lightweight, efficient and easy to use.
 
 
 ## Getting Started
+Include jQuery and use the production versions of the [javascript] and accompanied [stylesheet].
 
-Initialize the calendar in your web page:
+[javascript]: https://raw.github.com/zabuto/calendar/develop/dist/zabuto_calendar.min.js
+[stylesheet]: https://raw.github.com/zabuto/calendar/develop/dist/zabuto_calendar.min.css
+
+Initialize the calendar your web page:
 
 ```html
-<script src="lib/jquery/jquery.js"></script>
-<script src="dist/zabuto_calendar.min.js"></script>
-<link rel="stylesheet" type="text/css" href="dist/zabuto_calendar.min.css">
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src=" https://raw.github.com/zabuto/calendar/develop/dist/zabuto_calendar.min.js"></script>
+<link href="https://raw.github.com/zabuto/calendar/develop/dist/zabuto_calendar.min.css" rel="stylesheet">
 
 <div id="my-calendar"></div>
 
@@ -22,12 +24,8 @@ jQuery(function($) {
 });
 </script>
 ```
-
-## Documentation
-_(Coming soon)_
-
 ## Examples
-_(Coming soon)_
+Examples for the use of the calendar are includes in the sources. You can also check them out in the demo: http://zabuto.com/dev/calendar/demo/.
 
 ## Issues and contributing
 Please review the guidelines for [contributing](CONTRIBUTING.md) for more information.

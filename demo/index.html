@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="robots" content="noindex, nofollow">
+
+	<!-- -----------------------------
+     https://github.com/zabuto
+    ------------------------------ -->
+
+	<title>Zabuto Calendar Demo</title>
+
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//fonts.googleapis.com/css?family=Barlow+Semi+Condensed" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+	<script src="//code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+			crossorigin="anonymous"></script>
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+	<script
+		src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+	<!--[if lt IE 9]>
+	<script src="//oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+	<script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<!-- Zabuto Calendar -->
+	<script src="../dist/zabuto_calendar.min.js"></script>
+	<link href="../dist/zabuto_calendar.min.css" rel="stylesheet">
+
+	<!-- Demo -->
+	<link href="css/demo.css" rel="stylesheet">
+	<script src="js/demo.js"></script>
+</head>
+<body>
+
+<nav id="navbar" class="navbar navbar-default navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#demo-navbar">
+				<span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+			</button>
+			<a class="navbar-brand page-scroll" href="#page-top" data-scroll-speed="300">
+				<img src="apple-touch-icon.png" class="pull-left" alt="" aria-hidden="true">
+				Zabuto Calendar <span>Demo</span>
+			</a>
+		</div>
+
+		<div class="collapse navbar-collapse" id="demo-navbar">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a class="page-scroll" href="#basic">Basic</a></li>
+				<li><a class="page-scroll" href="#styling">Styling</a></li>
+				<li><a class="page-scroll" href="#language">Language</a></li>
+				<li><a class="page-scroll" href="#navigation">Navigation</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>
+<a id="page-top" aria-hidden="true"></a>
+
+<section id="intro" class="clearfix">
+	<div class="container">
+		<p class="lead">The Zabuto Calendar jQuery Plugin lets you add a simple month calendar to your web page. It's
+			lightweight, efficient and easy to use.</p>
+	</div>
+</section>
+
+<section id="basic" class="clearfix">
+	<div class="container">
+		<h2>Basic Usage</h2>
+
+		<h3>Initialize</h3>
+		<p>The calendar needs jQuery to function properly. After including jQuery the plugin can be used by
+			requiring the javascript and stylesheet file. Then view the calendar by defining a DOM-element and
+			initializing the plugin.</p>
+
+		<div class="row">
+			<div class="col-md-6 col-sm-12">
+				<pre class="prettyprint">&lt;!-- include jQuery --&gt;
+&lt;script src="../lib/jquery/jquery.js"&gt;&lt;/script&gt;
+
+&lt;!-- require the plugin files --&gt;
+&lt;script src="../dist/zabuto_calendar.min.js"&gt;&lt;/script&gt;
+&lt;link href="../dist/zabuto_calendar.min.css" rel="stylesheet"&gt;
+
+&lt;!-- define a DOM-element --&gt;
+&lt;div id="demo-calendar-basic"&gt;&lt;/div&gt;
+
+&lt;!-- initialize the plugin --&gt;
+&lt;script&gt;
+$(document).ready(function () {
+  $("#demo-calendar-basic").zabuto_calendar();
+});
+&lt;/script&gt;</pre>
+			</div>
+			<div class="col-md-6 col-sm-12">
+				<div class="demo-calendar basic" id="demo-calendar-basic"></div>
+				<script>
+					$(document).ready(function () {
+						$("#demo-calendar-basic").zabuto_calendar();
+					});
+				</script>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section id="styling" class="clearfix">
+	<div class="container">
+		<h2>Styling</h2>
+
+		<h3>Bootstrap / CSS</h3>
+		<p>The calendar can be easily used with Bootstrap. All you need to do is add one or more Bootstrap css table
+			classes to the calendar. The plugin stylesheet contains some Bootstrap css overrides to make it pretty. Of
+			course you can also add your own custom css classes with this setting.</p>
+
+		<dl class="dl-horizontal setting">
+			<dt>classname</dt>
+			<dd><span>string</span>Set the css table class name(s)</dd>
+		</dl>
+
+		<div class="row">
+			<div class="col-md-6 col-sm-12">
+				<pre class="prettyprint">&lt;!-- add some css classes --&gt;
+&lt;div id="demo-calendar-css"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+$(document).ready(function () {
+  $("#demo-calendar-css").zabuto_calendar({
+    classname: 'table table-bordered lightgrey-weekends'
+  });
+});
+&lt;/script&gt;
+
+&lt;style&gt;
+table.lightgrey-weekends tbody td:nth-child(n+6) {
+  background-color: #f3f3f3;
+}
+&lt;/style&gt;</pre>
+
+				<small class="text-muted">All the examples below contain a Bootstrap table classname.</small>
+			</div>
+			<div class="col-md-6 col-sm-12">
+				<div class="demo-calendar" id="demo-calendar-css"></div>
+				<script>
+					$(document).ready(function () {
+						$("#demo-calendar-css").zabuto_calendar({
+							classname: 'table table-bordered lightgrey-weekends'
+						});
+					});
+				</script>
+			</div>
+		</div>
+
+		<h3>Appearance</h3>
+		<p>You can alter the appearance of the calendar in several ways. <a href="http://fontawesome.io"
+																			target="_blank">Font Awesome</a> was added
+			to this page to show an alternative icon example.</p>
+
+		<dl class="dl-horizontal setting">
+			<dt>header_format</dt>
+			<dd><span>string</span>Format for the header; use `month` and `year` as placeholders</dd>
+			<dt>week_starts</dt>
+			<dd><span>string</span>Start the week on Sunday ('sunday') or Monday ('monday')</dd>
+			<dt>show_days</dt>
+			<dd><span>boolean</span>Show (true) or hide (false) the days of the week header</dd>
+			<dt>navigation</dt>
+			<dd><span>object</span>Override the 'prev' and/or 'next' icon html</dd>
+		</dl>
+
+		<div class="row">
+			<div class="col-md-6 col-sm-12">
+				<pre class="prettyprint">&lt;!-- alter the apppearance --&gt;
+&lt;div id="demo-calendar-apppearance"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+$(document).ready(function () {
+  $("#demo-calendar-apppearance").zabuto_calendar({
+    header_format: 'year // month',
+    week_starts: 'sunday',
+    show_days: true,
+    navigation: {
+      prev: '&lt;i class="fa fa-chevron-circle-left">&lt;/i&gt;',
+      next: '&lt;i class="fa fa-chevron-circle-right">&lt;/i&gt;'
+    }
+  });
+});
+&lt;/script&gt;</pre>
+			</div>
+			<div class="col-md-6 col-sm-12">
+				<div class="demo-calendar" id="demo-calendar-apppearance"></div>
+				<script>
+					$(document).ready(function () {
+						$("#demo-calendar-apppearance").zabuto_calendar({
+							classname: 'table',
+							header_format: 'year // month',
+							week_starts: 'sunday',
+							show_days: true,
+							navigation: {
+								prev: '<i class="fa fa-chevron-circle-left"></i>',
+								next: '<i class="fa fa-chevron-circle-right"></i>'
+							}
+						});
+					});
+				</script>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section id="language" class="clearfix">
+	<div class="container">
+		<h2>Language Settings</h2>
+
+		<h3>Included languages</h3>
+		<p>You can customize the language of the calendar by using the available translations. Just use the locale code
+			for your language.</p>
+
+		<dl class="dl-horizontal setting">
+			<dt>language</dt>
+			<dd><span>string</span>Set the desired language of the calendar</dd>
+		</dl>
+
+		<div class="row">
+			<div class="col-md-6 col-sm-12">
+				<pre class="prettyprint">&lt;div id="demo-calendar-language"&gt;&lt;/div&gt;
+&lt;script&gt;
+$(document).ready(function () {
+  $("#demo-calendar-language").zabuto_calendar({
+    language: 'nl'
+  });
+});
+&lt;/script&gt;</pre>
+				Available languages:
+				<div class="row">
+					<div class="col-xs-6">
+						<dl class="dl-horizontal language">
+							<dt>en</dt>
+							<dd>English <span class="text-muted">[default value]</span></dd>
+						</dl>
+					</div>
+					<div class="col-xs-6">
+						<dl class="dl-horizontal language">
+							<dt>nl</dt>
+							<dd>Nederlands (Dutch)</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-12">
+				<div class="demo-calendar" id="demo-calendar-language"></div>
+				<script>
+					$(document).ready(function () {
+						$("#demo-calendar-language").zabuto_calendar({classname: 'table', language: 'nl'});
+					});
+				</script>
+			</div>
+		</div>
+
+		<h3>Custom translation</h3>
+		<p>If the language you want is not available you can set it yourself during initialization. Provide a
+			translation object with labels for months (from 1 to 12) and days of the week (from 0 to 6). Sunday is 0,
+			Monday is 1, and so on.</p>
+
+		<dl class="dl-horizontal setting">
+			<dt>translation</dt>
+			<dd><span>object</span>Set the custom translation</dd>
+		</dl>
+
+		<div class="row">
+			<div class="col-md-6 col-sm-12">
+				<pre class="prettyprint">&lt;div id="demo-calendar-welsh"&gt;&lt;/div&gt;
+&lt;script&gt;
+$(document).ready(function () {
+  $("#demo-calendar-welsh").zabuto_calendar({
+    translation: {
+      "months" : {
+        "1":"Ionawr",
+        "2":"Chwefror",
+        "3":"Mawrth",
+        "4":"Ebrill",
+        "5":"Mai",
+        "6":"Mehefin",
+        "7":"Gorffennaf",
+        "8":"Awst",
+        "9":"Medi",
+        "10":"Hydref",
+        "11":"Tachwedd",
+        "12":"Rhagfyr"
+      },
+      "days" : {
+        "0":"Sul",
+        "1":"Llu",
+        "2":"Maw",
+        "3":"Mer",
+        "4":"Iau",
+        "5":"Gwe",
+        "6":"Sad"
+      }
+    }
+  });
+});
+&lt;/script&gt;</pre>
+			</div>
+			<div class="col-md-6 col-sm-12">
+				<div class="demo-calendar" id="demo-calendar-welsh"></div>
+				<script>
+					$(document).ready(function () {
+						$("#demo-calendar-welsh").zabuto_calendar({
+							classname: 'table',
+							translation: {
+								"months": {
+									"1": "Ionawr",
+									"2": "Chwefror",
+									"3": "Mawrth",
+									"4": "Ebrill",
+									"5": "Mai",
+									"6": "Mehefin",
+									"7": "Gorffennaf",
+									"8": "Awst",
+									"9": "Medi",
+									"10": "Hydref",
+									"11": "Tachwedd",
+									"12": "Rhagfyr"
+								},
+								"days": {
+									"0": "Sul",
+									"1": "Llu",
+									"2": "Maw",
+									"3": "Mer",
+									"4": "Iau",
+									"5": "Gwe",
+									"6": "Sad"
+								}
+							}
+						});
+					});
+				</script>
+			</div>
+		</div>
+
+	</div>
+</section>
+
+<section id="navigation" class="clearfix">
+	<div class="container">
+		<h2>Navigation</h2>
+
+		<h3>Initial month/year</h3>
+		<p>You can initialize the calendar in a different year and/or than the current month/year.</p>
+
+		<dl class="dl-horizontal setting">
+			<dt>year</dt>
+			<dd><span>integer</span>Set the full year (ie. 2017)</dd>
+			<dt>month</dt>
+			<dd><span>integer</span>Set the month, (January = 1, December = 12)</dd>
+		</dl>
+
+		<div class="row">
+			<div class="col-md-6 col-sm-12">
+				<pre class="prettyprint">&lt;!-- change to December 1999 --&gt;
+&lt;div id="demo-calendar-yearmonth"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+$(document).ready(function () {
+  $("#demo-calendar-yearmonth").zabuto_calendar({
+    year: 1999,
+    month: 12
+  });
+});
+&lt;/script&gt;</pre>
+			</div>
+			<div class="col-md-6 col-sm-12">
+				<div class="demo-calendar" id="demo-calendar-yearmonth"></div>
+				<script>
+					$(document).ready(function () {
+						$("#demo-calendar-yearmonth").zabuto_calendar({
+							classname: 'table',
+							year: 1999,
+							month: 12
+						});
+					});
+				</script>
+			</div>
+		</div>
+	</div>
+</section>
+
+<footer>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				Zabuto Calendar is licensed under the MIT License.
+				<ul class="list-inline pull-right">
+					<li>
+						<a href="https://github.com/zabuto/calendar" target="_blank">github.com/zabuto/calendar</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</footer>
+
+<a class="page-scroll scrollup hidden-print" href="#page-top" data-scroll-speed="300">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+</body>
+</html>

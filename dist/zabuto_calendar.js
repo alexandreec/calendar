@@ -1,4 +1,4 @@
-/*! Zabuto Calendar - v2.0.0 - 2017-11-21
+/*! Zabuto Calendar - v2.0.0 - 2017-11-23
 * https://github.com/zabuto/calendar
 * Copyright (c) 2017 Anke Heijnen; Licensed MIT */
 
@@ -26,11 +26,11 @@
 		this._name = pluginName;
 		this._defaults = $.fn[pluginName].defaults;
 		this.settings = $.extend({}, this._defaults, options);
-		this.settings.language = this.settings.language.toLowerCase();
 
-		this._languages = $.fn[pluginName].languages;
 		if (null !== this.settings.translation) {
-			this._setTranslation(this.settings.language, this.settings.translation);
+			this.settings.language = null;
+		} else {
+			this.settings.language = this.settings.language.toLowerCase();
 		}
 
 		this.init();
@@ -175,7 +175,7 @@
 			var label = self.settings.header_format;
 			label = label.replace('year', year.toString());
 
-			var translation = self._getTranslation(self.settings.language);
+			var translation = self._getTranslation();
 			if (null !== translation && 'months' in translation) {
 				var labels = translation['months'];
 				label = label.replace('month', labels[month.toString()]);
@@ -237,7 +237,7 @@
 			var start = this.settings.week_starts;
 
 			var labels = {"0": "0", "1": "1", "2": "2", "3": "3", "4": "4", "5": "5", "6": "6"};
-			var translation = this._getTranslation(this.settings.language);
+			var translation = this._getTranslation();
 			if (null !== translation && 'days' in translation) {
 				labels = translation['days'];
 			}
@@ -342,24 +342,20 @@
 		/**
 		 * Get translation
 		 */
-		_getTranslation: function (locale) {
-			var languages = this._languages;
+		_getTranslation: function () {
+			var translation = this.settings.translation;
+			if (null !== translation && typeof translation === 'object' && 'months' in translation && 'days' in translation) {
+				return translation;
+			}
+
+			var locale = this.settings.language;
+			var languages = $.fn[pluginName].languages;
+
 			if (locale in languages) {
 				return languages[locale];
 			}
 
 			return null;
-		},
-
-		/**
-		 * Set translation
-		 */
-		_setTranslation: function (locale, translation) {
-			if (typeof translation === 'object' && 'months' in translation && 'days' in translation) {
-				this._languages[locale] = translation;
-				return true;
-			}
-			return false;
 		},
 
 		/**
