@@ -13,8 +13,8 @@ Initialize the calendar your web page:
 
 ```html
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-<script src=" https://raw.github.com/zabuto/calendar/develop/dist/zabuto_calendar.min.js"></script>
-<link href="https://raw.github.com/zabuto/calendar/develop/dist/zabuto_calendar.min.css" rel="stylesheet">
+<script src="https://cdn.rawgit.com/zabuto/calendar/develop/dist/zabuto_calendar.min.js"></script>
+<link href="https://cdn.rawgit.com/zabuto/calendar/develop/dist/zabuto_calendar.min.css" rel="stylesheet">
 
 <div id="my-calendar"></div>
 
