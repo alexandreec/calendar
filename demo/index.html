@@ -12,25 +12,26 @@
 
 	<title>Zabuto Calendar Demo</title>
 
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-	<link href="//fonts.googleapis.com/css?family=Barlow+Semi+Condensed" rel="stylesheet">
-	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
-	<script src="//code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"
+			integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
 			crossorigin="anonymous"></script>
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
 	<script
-		src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+		src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
 	<!--[if lt IE 9]>
-	<script src="//oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-	<script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 
 	<!-- Zabuto Calendar -->
-	<script src="//cdn.rawgit.com/zabuto/calendar/develop/dist/zabuto_calendar.min.js"></script>
-	<link href="//cdn.rawgit.com/zabuto/calendar/develop/dist/zabuto_calendar.min.css" rel="stylesheet">
+	<script src="https://cdn.rawgit.com/zabuto/calendar/develop/dist/zabuto_calendar.min.js"></script>
+	<link href="https://cdn.rawgit.com/zabuto/calendar/develop/dist/zabuto_calendar.min.css" rel="stylesheet">
 
 	<!-- Demo -->
 	<link href="css/demo.css" rel="stylesheet">
@@ -95,7 +96,7 @@
 &lt;script src="../dist/zabuto_calendar.min.js"&gt;&lt;/script&gt;
 &lt;link href="../dist/zabuto_calendar.min.css" rel="stylesheet"&gt;
 
-&lt;!-- define a DOM-element --&gt;
+&lt;!-- define an element --&gt;
 &lt;div id="demo-calendar-basic"&gt;&lt;/div&gt;
 
 &lt;!-- initialize the plugin --&gt;
@@ -176,7 +177,7 @@ table.lightgrey-weekends tbody td:nth-child(n+6) {
 			<dd><span>string</span>Start the week on Sunday ('sunday') or Monday ('monday')</dd>
 			<dt>show_days</dt>
 			<dd><span>boolean</span>Show (true) or hide (false) the days of the week header</dd>
-			<dt>navigation</dt>
+			<dt>navigation_icons</dt>
 			<dd><span>object</span>Override the 'prev' and/or 'next' icon html</dd>
 		</dl>
 
@@ -191,10 +192,10 @@ $(document).ready(function () {
     header_format: 'year // month',
     week_starts: 'sunday',
     show_days: true,
-    navigation: {
-      prev: '&lt;i class="fa fa-chevron-circle-left">&lt;/i&gt;',
-      next: '&lt;i class="fa fa-chevron-circle-right">&lt;/i&gt;'
-    }
+    navigation_icons: {
+        prev: '&lt;i class="fa fa-chevron-circle-left">&lt;/i&gt;',
+        next: '&lt;i class="fa fa-chevron-circle-right">&lt;/i&gt;'
+      }
   });
 });
 &lt;/script&gt;</pre>
@@ -208,7 +209,7 @@ $(document).ready(function () {
 							header_format: 'year // month',
 							week_starts: 'sunday',
 							show_days: true,
-							navigation: {
+							navigation_icons: {
 								prev: '<i class="fa fa-chevron-circle-left"></i>',
 								next: '<i class="fa fa-chevron-circle-right"></i>'
 							}
@@ -359,13 +360,13 @@ $(document).ready(function () {
 		<h2>Navigation</h2>
 
 		<h3>Initial month/year</h3>
-		<p>You can initialize the calendar in a different year and/or than the current month/year.</p>
+		<p>You can initialize the calendar in a different year and/or month than the current date.</p>
 
 		<dl class="dl-horizontal setting">
 			<dt>year</dt>
 			<dd><span>integer</span>Set the full year (ie. 2017)</dd>
 			<dt>month</dt>
-			<dd><span>integer</span>Set the month, (January = 1, December = 12)</dd>
+			<dd><span>integer</span>Set the month (January = 1, December = 12)</dd>
 		</dl>
 
 		<div class="row">
@@ -390,6 +391,44 @@ $(document).ready(function () {
 							classname: 'table',
 							year: 1999,
 							month: 12
+						});
+					});
+				</script>
+			</div>
+		</div>
+
+		<h3>Disable navigation</h3>
+		<p>You can disable the navigation to previous and/or next months.</p>
+
+		<dl class="dl-horizontal setting">
+			<dt>navigation_prev</dt>
+			<dd><span>boolean</span>Disable the navigation to previous months completely</dd>
+			<dt>navigation_next</dt>
+			<dd><span>boolean</span>Disable the navigation to next months completely</dd>
+		</dl>
+
+		<div class="row">
+			<div class="col-md-6 col-sm-12">
+				<pre class="prettyprint">&lt;!-- disable navigation --&gt;
+&lt;div id="demo-calendar-disable-nav"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+$(document).ready(function () {
+  $("#demo-calendar-disable-nav").zabuto_calendar({
+    navigation_prev: false,
+    navigation_next: false
+  });
+});
+&lt;/script&gt;</pre>
+			</div>
+			<div class="col-md-6 col-sm-12">
+				<div class="demo-calendar" id="demo-calendar-disable-nav"></div>
+				<script>
+					$(document).ready(function () {
+						$("#demo-calendar-disable-nav").zabuto_calendar({
+							classname: 'table',
+							navigation_prev: false,
+							navigation_next: false
 						});
 					});
 				</script>

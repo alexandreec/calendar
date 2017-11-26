@@ -8,32 +8,14 @@
 	padding: 0;
 }
 
-.zabuto-calendar__navigation {
-	padding-top: 12px;
-	padding-bottom: 4px;
-	background-color: #fafafa;
-}
-
 .zabuto-calendar__navigation__item--prev,
 .zabuto-calendar__navigation__item--next {
 	text-align: center;
 	cursor: pointer;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
 }
 
 .zabuto-calendar__navigation__item--header {
 	text-align: center;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
 }
 
 .zabuto-calendar__navigation__item--header__title {
@@ -41,16 +23,8 @@
 	font-weight: bolder;
 }
 
-.zabuto-calendar__days-of-week {
-	background-color: #f0f0f0;
-}
-
 .zabuto-calendar__days-of-week__item {
 	text-align: center;
-}
-
-.zabuto-calendar__week--last {
-	border-bottom: 1px solid #ddd;
 }
 
 .zabuto-calendar__day {
@@ -61,17 +35,19 @@
 	text-align: center;
 }
 
-.zabuto-calendar__day--empty {
-}
-
 /* Bootstrap overrides */
 .zabuto-calendar.table thead td {
 	padding-top: 14px;
 	padding-bottom: 14px;
+	background-color: #fafafa;
 }
 
 .zabuto-calendar.table-bordered thead td {
 	border: 0;
+}
+
+.zabuto-calendar.table thead th {
+	background-color: #f0f0f0;
 }
 
 .zabuto-calendar.table > thead:first-child > tr:first-child > td {
@@ -80,4 +56,8 @@
 
 .zabuto-calendar.table > thead > tr > th {
 	border-bottom: 2px solid #ddd;
+}
+
+.zabuto-calendar.table > tbody > tr:last-child > td {
+	border-bottom: 1px solid #ddd;
 }

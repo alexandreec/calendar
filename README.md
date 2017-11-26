@@ -19,7 +19,7 @@ Initialize the calendar your web page:
 <div id="my-calendar"></div>
 
 <script>
-jQuery(function($) {
+$(document).ready(function () {
   $("#my-calendar").zabuto_calendar();
 });
 </script>

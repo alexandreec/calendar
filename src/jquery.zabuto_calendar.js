@@ -69,11 +69,14 @@
 		classname: null,
 		header_format: 'month year',
 		date_format: 'y-m-d',
-		navigation: {
+		navigation_prev: true,
+		navigation_next: true,
+		navigation_icons: {
 			prev: '<span class="glyphicon glyphicon-chevron-left"></span>',
 			next: '<span class="glyphicon glyphicon-chevron-right"></span>'
 		},
 		onInit: $.noop,
+		onGoto: $.noop,
 		onDestroy: $.noop
 	};
 
@@ -93,7 +96,9 @@
 			var element = $(this.element);
 			element.data('year', this.settings.year);
 			element.data('month', this.settings.month);
+
 			this.settings.onInit.call(element);
+
 			this.render();
 		},
 
@@ -119,8 +124,11 @@
 				return;
 			}
 
-			$(this.element).data('year', year);
-			$(this.element).data('month', month);
+			var element = $(this.element);
+			element.data('year', year);
+			element.data('month', month);
+
+			this.settings.onGoto.call(element);
 
 			this.render();
 		},
@@ -183,27 +191,34 @@
 
 			var nav = $('<tr></tr>').addClass('zabuto-calendar__navigation').attr('role', 'navigation');
 
-			var prev = self._renderNavigationItem('prev', self._calculatePrevious(year, month));
-			var next = self._renderNavigationItem('next', self._calculateNext(year, month));
+			var toPrev = self._calculatePrevious(year, month);
+			var toNext = self._calculateNext(year, month);
 
 			var title = $('<span></span>').text(label).data('to', {
 				year: self.settings.year,
 				month: self.settings.month
 			});
 			title.addClass('zabuto-calendar__navigation__item--header__title');
-			title.on('dblclick.zabuto_calendar', function (e) {
-				e.preventDefault();
-				var to = $(this).data('to');
-				self.goto(to.year, to.month);
-			});
+
+			if (null !== toPrev || null !== toNext) {
+				title.on('dblclick.zabuto_calendar', function (e) {
+					e.preventDefault();
+					var to = $(this).data('to');
+					self.goto(to.year, to.month);
+				});
+			}
 
 			var header = $('<td></td>');
 			header.addClass('zabuto-calendar__navigation__item--header');
 			header.append(title);
 
-			nav.append(prev);
-			nav.append(header.attr('colspan', 5));
-			nav.append(next);
+			if (null === toPrev && null === toNext) {
+				nav.append(header.attr('colspan', 7));
+			} else {
+				nav.append(self._renderNavigationItem('prev', toPrev));
+				nav.append(header.attr('colspan', 5));
+				nav.append(self._renderNavigationItem('next', toNext));
+			}
 
 			return nav;
 		},
@@ -218,12 +233,20 @@
 
 			var item = $('<td></td>').data('nav', type).data('to', to);
 			item.addClass('zabuto-calendar__navigation__item--' + type);
-			item.html(self.settings.navigation[type]);
-			item.on('click.zabuto_calendar', function (e) {
-				e.preventDefault();
-				var to = $(this).data('to');
-				self.goto(to.year, to.month);
-			});
+
+			if (null !== to) {
+				if (type in self.settings.navigation_icons) {
+					item.html(self.settings.navigation_icons[type]);
+				} else {
+					item.html(type);
+				}
+
+				item.on('click.zabuto_calendar', function (e) {
+					e.preventDefault();
+					var to = $(this).data('to');
+					self.goto(to.year, to.month);
+				});
+			}
 
 			return item;
 		},
@@ -243,18 +266,18 @@
 			var dow = $('<tr></tr>').addClass('zabuto-calendar__days-of-week');
 
 			if (start === 0 || start === '0' || start === 'sunday') {
-				dow.append($('<th></th>').text(labels['0']).addClass('zabuto-calendar__days-of-week__item'));
+				dow.append($('<th></th>').data('dow', 0).text(labels['0']).addClass('zabuto-calendar__days-of-week__item'));
 			}
 
-			dow.append($('<th></th>').text(labels['1']).addClass('zabuto-calendar__days-of-week__item'));
-			dow.append($('<th></th>').text(labels['2']).addClass('zabuto-calendar__days-of-week__item'));
-			dow.append($('<th></th>').text(labels['3']).addClass('zabuto-calendar__days-of-week__item'));
-			dow.append($('<th></th>').text(labels['4']).addClass('zabuto-calendar__days-of-week__item'));
-			dow.append($('<th></th>').text(labels['5']).addClass('zabuto-calendar__days-of-week__item'));
-			dow.append($('<th></th>').text(labels['6']).addClass('zabuto-calendar__days-of-week__item'));
+			dow.append($('<th></th>').data('dow', 1).text(labels['1']).addClass('zabuto-calendar__days-of-week__item'));
+			dow.append($('<th></th>').data('dow', 2).text(labels['2']).addClass('zabuto-calendar__days-of-week__item'));
+			dow.append($('<th></th>').data('dow', 3).text(labels['3']).addClass('zabuto-calendar__days-of-week__item'));
+			dow.append($('<th></th>').data('dow', 4).text(labels['4']).addClass('zabuto-calendar__days-of-week__item'));
+			dow.append($('<th></th>').data('dow', 5).text(labels['5']).addClass('zabuto-calendar__days-of-week__item'));
+			dow.append($('<th></th>').data('dow', 6).text(labels['6']).addClass('zabuto-calendar__days-of-week__item'));
 
 			if (start === 1 || start === '1' || start === 'monday') {
-				dow.append($('<th></th>').text(labels['0']).addClass('zabuto-calendar__days-of-week__item'));
+				dow.append($('<th></th>').data('dow', 0).text(labels['0']).addClass('zabuto-calendar__days-of-week__item'));
 			}
 
 			return dow;
@@ -403,6 +426,10 @@
 		 * Calculate previous month/year
 		 */
 		_calculatePrevious: function (year, month) {
+			if (false === this.settings.navigation_prev) {
+				return null;
+			}
+
 			var prevYear = year;
 			var prevMonth = (month - 1);
 			if (prevMonth === 0) {
@@ -417,6 +444,10 @@
 		 * Calculate next month/year
 		 */
 		_calculateNext: function (year, month) {
+			if (false === this.settings.navigation_next) {
+				return null;
+			}
+
 			var nextYear = year;
 			var nextMonth = (month + 1);
 			if (nextMonth === 13) {
